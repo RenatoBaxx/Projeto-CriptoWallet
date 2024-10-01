@@ -1,16 +1,18 @@
-#include <stdio.h>
+extern float saldoReais;
 
-float saldoReais = 0.00;  
-float saldoBitcoin = 0.00; 
-float saldoEthereum = 0.00; 
-float saldoXRP = 0.00;  
+void sacar(char* cpf) {
+    float valor;
+    printf("Digite o valor a ser sacado: ");
+    scanf("%f", &valor);
 
-void consultarSaldo(char* cpf) {
-    printf("\nCPF: %s\n", cpf);
-    printf("Saldo em Real: %.2f\n", saldoReais);
-    printf("Saldo em Bitcoin: %.2f\n", saldoBitcoin);
-    printf("Saldo em Ethereum: %.2f\n", saldoEthereum);
-    printf("Saldo em XRP: %.2f\n", saldoXRP);
+    if (valor > 0 && valor <= saldoReais) {
+        saldoReais -= valor;
+        printf("\nSaque realizado com sucesso!\n");
+        printf("Saldo atualizado: %.2f\n", saldoReais);
+        salvarTransacao(cpf, "Saque", valor); 
+    } else {
+        printf("Valor inválido ou saldo insuficiente.\n");
+    }
 
     int escolha;
     do {

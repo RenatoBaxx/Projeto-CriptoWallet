@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* Menu Principal */
+
 void consultarSaldo(char* cpf);
 void consultarExtrato(char* cpf);
 void depositarReais(char* cpf);
