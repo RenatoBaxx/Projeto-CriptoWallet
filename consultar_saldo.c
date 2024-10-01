@@ -4,7 +4,7 @@ float saldoReais = 0.00;
 float saldoBitcoin = 0.00; 
 float saldoEthereum = 0.00; 
 float saldoXRP = 0.00;  
-/* Feito por Lucas */
+
 void consultarSaldo(char* cpf) {
     printf("\nCPF: %s\n", cpf);
     printf("Saldo em Real: %.2f\n", saldoReais);
