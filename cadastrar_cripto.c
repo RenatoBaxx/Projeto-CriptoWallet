@@ -33,3 +33,4 @@ void cadastrarCriptomoeda() {
 
     printf("Criptomoeda cadastrada com sucesso!\n");
 }
+//salve
