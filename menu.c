@@ -22,19 +22,19 @@ void exibirMenu() {
       CadastrarInvestidor();
       break;
     case 2:
-      // CadastrarCriptomoeda();
+      cadastrarCriptomoeda();
       break;
     case 3:
-      // ExcluirCriptomoeda();
+      excluirCriptomoeda();
       break;
     case 4:
-      // ConsultarSaldo();
+      ConsultarSaldo();
       break;
     case 5:
-      // ConsultarExtrato();
+      ConsultarExtrato();
       break;
     case 6:
-      // AtualizarCotacao();
+      AtualizarCotacao();
       break;
     case 7:
       printf("Saindo...\n");
@@ -54,3 +54,5 @@ int main() {
     }
     return 0;
 }
+// salve
+
