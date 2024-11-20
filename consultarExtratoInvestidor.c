@@ -1,61 +1,60 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include "funcoes.h"
 
-#define MAX_TRANSACOES 100
+void trim(char *str) {
+    int start = 0;
+    int end = strlen(str) - 1;
 
-typedef struct {
-    char cpf[12];
-    char descricao[100];
-    float valor;
-    char data[11];
-} Transacao;
+    while (isspace((unsigned char)str[start])) start++;
+    while (end >= start && isspace((unsigned char)str[end])) end--;
 
-int carregarTransacoes(Transacao transacoes[], const char *caminhoArquivo) {
-    FILE *arquivo = fopen(caminhoArquivo, "r");
-    if (arquivo == NULL) {
-        printf("Erro ao abrir o arquivo %s.\n", caminhoArquivo);
-        return 0;
-    }
-
-    int count = 0;
-    while (fscanf(arquivo, "%11s %99[^"] %f %10s", 
-                  transacoes[count].cpf, 
-                  transacoes[count].descricao, 
-                  &transacoes[count].valor, 
-                  transacoes[count].data) == 4) {
-        count++;
-        if (count >= MAX_TRANSACOES) {
-            break;
-        }
-    }
-
-    fclose(arquivo);
-    return count;
+    memmove(str, str + start, end - start + 1);
+    str[end - start + 1] = '\0';
 }
 
-void consultarExtrato(Transacao transacoes[], int totalTransacoes) {
-    char cpfBusca[12];
-    int encontrado = 0;
+void consultarExtrato() {
+    char cpf[12];
+    printf("Digite o CPF (somente números): ");
+    scanf("%s", cpf);
 
-    printf("Digite o CPF do investidor (apenas números): ");
-    scanf("%11s", cpfBusca);
+    FILE *file = fopen("extrato.txt", "r");
 
-    printf("\nExtrato de transações para o CPF: %s\n", cpfBusca);
-    printf("----------------------------------------\n");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo de extrato.\n");
+        return;
+    } else {
+        printf("\nExtrato de operações para o CPF: %s\n", cpf);
+        char line[256];
+        int found = 0;
+        while (fgets(line, sizeof(line), file)) {
+            printf("%s", line);
 
-    for (int i = 0; i < totalTransacoes; i++) {
-        if (strcmp(transacoes[i].cpf, cpfBusca) == 0) {
-            printf("Data: %s | Descrição: %s | Valor: %.2f\n", 
-                   transacoes[i].data, 
-                   transacoes[i].descricao, 
-                   transacoes[i].valor);
-            encontrado = 1;
+            char fileCpf[12]; 
+            char *token = strtok(line, " | ");
+
+            if (token != NULL) {
+                strncpy(fileCpf, token, sizeof(fileCpf));
+                fileCpf[11] = '\0'; 
+
+                trim(fileCpf);
+
+                printf("CPF do arquivo: %s\n", fileCpf);
+
+                if (strcmp(cpf, fileCpf) == 0) { CPF no arquivo
+                    printf("Operação encontrada: %s", line);
+                    found = 1;
+                }
+            }
         }
-    }
 
-    if (!encontrado) {
-        printf("Nenhuma transação encontrada para o CPF %s.\n", cpfBusca);
+        if (!found) {
+            printf("Nenhuma operação encontrada para o CPF: %s\n", cpf);
+        }
+
+        fclose(file);
     }
 
     int escolha;
@@ -64,10 +63,10 @@ void consultarExtrato(Transacao transacoes[], int totalTransacoes) {
         scanf("%d", &escolha);
 
         if (escolha == 1) {
-            return;
+            return; 
         } else if (escolha == 2) {
             printf("Saindo...\n");
-            exit(0);
+            return; 
         } else {
             printf("Opção inválida! Por favor, escolha uma opção válida.\n");
         }
@@ -75,14 +74,6 @@ void consultarExtrato(Transacao transacoes[], int totalTransacoes) {
 }
 
 int main() {
-    Transacao transacoes[MAX_TRANSACOES];
-    int totalTransacoes = carregarTransacoes(transacoes, "extrato.txt");
-
-    if (totalTransacoes > 0) {
-        consultarExtrato(transacoes, totalTransacoes);
-    } else {
-        printf("Nenhum dado de transação foi carregado.\n");
-    }
-
+    consultarExtrato();
     return 0;
 }
